@@ -1,0 +1,23 @@
+<div class="app">
+  <nav class="app__nav">
+    <div class="app__nav-brand">
+      <span class="app__logo">🐇</span>
+      <h1>Hop Dashboard</h1>
+    </div>
+    <div class="app__nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/analytics" routerLinkActive="active">Analytics</a>
+      <a routerLink="/monitoring" routerLinkActive="active">Monitoring</a>
+    </div>
+  </nav>
+
+  <main class="app__main">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="app__footer">
+    <p>
+      &copy; 2025 Hop Dashboard - Powered by Angular & bunny.net inspiration
+    </p>
+  </footer>
+</div>

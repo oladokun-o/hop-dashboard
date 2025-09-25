@@ -1,0 +1,182 @@
+<div class="dashboard" [class.loading]="loading()">
+  <!-- Header Section -->
+  <header class="dashboard__header">
+    <div class="dashboard__title">
+      <h1 class="hop-animation">🐇 Hop Dashboard</h1>
+      <p>Global Edge Network Monitoring & Analytics</p>
+    </div>
+
+    <div class="dashboard__controls">
+      <select
+        class="dashboard__time-select"
+        [value]="selectedTimeRange()"
+        (change)="onTimeRangeChange($event)"
+      >
+        <option value="1h">Last Hour</option>
+        <option value="6h">Last 6 Hours</option>
+        <option value="24h">Last 24 Hours</option>
+        <option value="7d">Last 7 Days</option>
+        <option value="30d">Last 30 Days</option>
+      </select>
+
+      <hop-button
+        [variant]="autoRefresh() ? 'primary' : 'outline'"
+        size="sm"
+        (click)="toggleAutoRefresh()"
+        [class.active]="autoRefresh()"
+      >
+        {{ autoRefresh() ? "🔄 Auto Refresh On" : "⏸️ Auto Refresh Off" }}
+      </hop-button>
+
+      <hop-button
+        variant="secondary"
+        size="sm"
+        (click)="refreshDashboard()"
+        [disabledState]="loading()"
+      >
+        🔄 Refresh
+      </hop-button>
+    </div>
+  </header>
+
+  <!-- Error Alert -->
+  @if (error()) {
+  <div class="dashboard__error">
+    <div class="alert alert--error">
+      <span>⚠️ {{ error() }}</span>
+      <button (click)="clearError()" class="alert__close">&times;</button>
+    </div>
+  </div>
+  }
+
+  <!-- Summary Metrics -->
+  <!-- <section class="dashboard__metrics">
+    <hop-metric-card
+      title="Total Requests"
+      [value]="summary().totalRequests"
+      unit=""
+      icon="📊"
+      trend="up"
+      [loading]="loading()"
+    >
+    </hop-metric-card>
+
+    <hop-metric-card
+      title="Cache Hit Rate"
+      [value]="summary().cacheHitRate"
+      unit="%"
+      icon="🎯"
+      trend="stable"
+      [loading]="loading()"
+    >
+    </hop-metric-card>
+
+    <hop-metric-card
+      title="Avg Response Time"
+      [value]="summary().avgResponseTime"
+      unit="ms"
+      icon="⚡"
+      trend="down"
+      [loading]="loading()"
+    >
+    </hop-metric-card>
+
+    <hop-metric-card
+      title="Uptime"
+      [value]="summary().uptime"
+      unit="%"
+      icon="🟢"
+      trend="up"
+      [loading]="loading()"
+    >
+    </hop-metric-card>
+  </section> -->
+
+  <!-- Main Content Grid -->
+  <div class="dashboard__grid">
+    <!-- Edge Nodes Status -->
+    <hop-card title="🌍 Global Edge Nodes" class="dashboard__nodes">
+      <div class="node-status-summary">
+        <div class="status-counts">
+          <div class="status-count status-count--healthy">
+            <span class="count">{{ nodeStatusCounts().healthy }}</span>
+            <span class="label">Healthy</span>
+          </div>
+          <div class="status-count status-count--warning">
+            <span class="count">{{ nodeStatusCounts().warning }}</span>
+            <span class="label">Warning</span>
+          </div>
+          <div class="status-count status-count--error">
+            <span class="count">{{ nodeStatusCounts().error }}</span>
+            <span class="label">Error</span>
+          </div>
+          <div class="status-count status-count--offline">
+            <span class="count">{{ nodeStatusCounts().offline }}</span>
+            <span class="label">Offline</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="node-list" data-testid="edge-nodes">
+        @for (node of edgeNodes(); track node.id) {
+        <div class="node-item">
+          <hop-status-indicator
+            [status]="node.status"
+            [label]="node.location + ', ' + node.country"
+          >
+          </hop-status-indicator>
+          <div class="node-metrics">
+            <span class="metric">{{ node.responseTime }}ms</span>
+            <span class="metric"
+              >{{ formatNumber(node.requestCount) }} req/s</span
+            >
+          </div>
+        </div>
+        }
+      </div>
+    </hop-card>
+
+    <!-- Traffic Chart -->
+    <hop-card title="📈 Traffic Overview" class="dashboard__traffic">
+      <div data-testid="metrics-chart">
+        <hop-chart [config]="trafficChartConfig" [data]="recentTraffic()">
+        </hop-chart>
+      </div>
+    </hop-card>
+
+    <!-- Geographic Distribution -->
+    <hop-card title="🗺️ Geographic Distribution" class="dashboard__regions">
+      @for (region of topRegions(); track region.region) {
+      <div class="region-item">
+        <div class="region-info">
+          <span class="region-name">{{ region.region }}</span>
+          <span class="region-percentage">{{ region.percentage }}%</span>
+        </div>
+        <div class="region-bar">
+          <div class="region-fill" [style.width.%]="region.percentage"></div>
+        </div>
+        <div class="region-stats">
+          <span>{{ formatNumber(region.requests) }} requests</span>
+          <span>{{ region.avgResponseTime }}ms avg</span>
+        </div>
+      </div>
+      }
+    </hop-card>
+
+    <!-- Performance Trends -->
+    <hop-card title="⚡ Performance Trends" class="dashboard__performance">
+      <hop-chart [config]="performanceChartConfig" [data]="performanceData()">
+      </hop-chart>
+    </hop-card>
+  </div>
+
+  <!-- Loading Overlay -->
+  @if (loading()) {
+  <div class="dashboard__loading">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Hopping to fetch latest data...</p>
+    </div>
+  </div>
+  }
+</div>
