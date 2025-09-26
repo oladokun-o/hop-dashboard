@@ -1,143 +1,223 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { fn } from 'storybook/test';
-// import { Procedure } from 'storybook-addon-playwright';
 import { HopButtonComponent } from '../lib/button/button.component';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories
 const meta: Meta<HopButtonComponent> = {
-  title: 'Example/Button',
+  title: 'Components/Button',
   component: HopButtonComponent,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'A flexible and accessible button component with multiple variants and states. Inspired by bunny.net\'s modern design principles.',
+      },
+    },
+  },
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'select' },
+      control: 'select',
       options: ['primary', 'secondary', 'outline', 'ghost', 'danger'],
+      description: 'Visual style variant of the button',
     },
     size: {
-      control: { type: 'select' },
+      control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      description: 'Size of the button',
     },
-    type: {
-      control: { type: 'select' },
-      options: ['button', 'submit', 'reset'],
+    isDisabled: {
+      control: 'boolean',
+      description: 'Whether the button is disabled',
     },
-    icon: { control: 'text' },
-    badge: { control: 'text' },
-    ariaLabel: { control: 'text' },
-    fullWidth: { control: 'boolean' },
-    disabledState: { control: 'boolean' },
-    click: { action: 'clicked' },
+    isLoading: {
+      control: 'boolean',
+      description: 'Whether the button shows loading state',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Whether the button takes full width',
+    },
+    icon: {
+      control: 'text',
+      description: 'Icon to display (emoji or HTML)',
+    },
+    badge: {
+      control: 'text',
+      description: 'Badge text to display',
+    },
+  },
+  args: {
+    variant: 'primary',
+    size: 'md',
+    isDisabled: false,
+    isLoading: false,
+    fullWidth: false,
   },
 };
 
 export default meta;
 type Story = StoryObj<HopButtonComponent>;
 
-export const Primary: Story = {
+export const Default: Story = {
   args: {
     variant: 'primary',
     size: 'md',
-    type: 'button',
-    icon: '',
-    badge: '',
-    ariaLabel: 'Primary Button',
-    fullWidth: false,
-    disabledState: false,
   },
-  play: async ({ args, canvasElement }) => {
-    const button = canvasElement.querySelector('button');
-    if (button) {
-      button.addEventListener('click', () => {
-        // fn(Procedure.CLICK)();
-      });
-    }
-  },
+  render: (args) => ({
+    props: args,
+    template: `<hop-button [variant]="variant" [size]="size" [isDisabled]="isDisabled" [isLoading]="isLoading" [fullWidth]="fullWidth" [icon]="icon" [badge]="badge">Hop Forward</hop-button>`,
+  }),
 };
 
-export const Secondary: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'secondary',
-    ariaLabel: 'Secondary Button',
-  },
+export const Variants: Story = {
+  name: 'All Variants',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button variant="primary">Primary</hop-button>
+        <hop-button variant="secondary">Secondary</hop-button>
+        <hop-button variant="outline">Outline</hop-button>
+        <hop-button variant="ghost">Ghost</hop-button>
+        <hop-button variant="danger">Danger</hop-button>
+      </div>
+    `,
+  }),
 };
 
-export const Outline: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'outline',
-    ariaLabel: 'Outline Button',
-  },
+export const Sizes: Story = {
+  name: 'All Sizes',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button size="xs">Extra Small</hop-button>
+        <hop-button size="sm">Small</hop-button>
+        <hop-button size="md">Medium</hop-button>
+        <hop-button size="lg">Large</hop-button>
+        <hop-button size="xl">Extra Large</hop-button>
+      </div>
+    `,
+  }),
 };
 
-export const Ghost: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'ghost',
-    ariaLabel: 'Ghost Button',
-  },
+export const WithIcons: Story = {
+  name: 'With Icons',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button icon="🐇" variant="primary">Hop Now</hop-button>
+        <hop-button icon="📊" variant="secondary">Analytics</hop-button>
+        <hop-button icon="⚡" variant="outline">Fast Deploy</hop-button>
+        <hop-button icon="🔄" variant="ghost">Refresh</hop-button>
+      </div>
+    `,
+  }),
 };
 
-export const Danger: Story = {
-  args: {
-    ...Primary.args,
-    variant: 'danger',
-    ariaLabel: 'Danger Button',
-  },
+export const IconOnly: Story = {
+  name: 'Icon Only',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button icon="🐇" variant="primary" size="sm"></hop-button>
+        <hop-button icon="⚙️" variant="secondary"></hop-button>
+        <hop-button icon="❤️" variant="outline" size="lg"></hop-button>
+      </div>
+    `,
+  }),
 };
 
-export const WithIcon: Story = {
-  args: {
-    ...Primary.args,
-    icon: '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>',
-    ariaLabel: 'Button with Icon',
-  },
+export const WithBadges: Story = {
+  name: 'With Badges',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button badge="New" variant="primary">Features</hop-button>
+        <hop-button badge="3" variant="secondary">Notifications</hop-button>
+        <hop-button badge="99+" variant="outline">Messages</hop-button>
+      </div>
+    `,
+  }),
 };
 
-export const Loading: Story = {
-  args: {
-    ...Primary.args,
-    disabledState: true,
-    ariaLabel: 'Loading Button',
-  },
+export const States: Story = {
+  name: 'Button States',
+  render: () => ({
+    template: `
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <hop-button variant="primary">Normal</hop-button>
+        <hop-button variant="primary" [isDisabled]="true">Disabled</hop-button>
+        <hop-button variant="primary" [isLoading]="true">Loading</hop-button>
+      </div>
+    `,
+  }),
 };
 
 export const FullWidth: Story = {
-  args: {
-    ...Primary.args,
-    fullWidth: true,
-    ariaLabel: 'Full Width Button',
-  },
+  name: 'Full Width',
+  render: () => ({
+    template: `
+      <div style="width: 400px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <hop-button variant="primary" [fullWidth]="true">Full Width Primary</hop-button>
+          <hop-button variant="secondary" [fullWidth]="true">Full Width Secondary</hop-button>
+          <hop-button variant="outline" [fullWidth]="true">Full Width Outline</hop-button>
+        </div>
+      </div>
+    `,
+  }),
 };
 
-export const Small: Story = {
+export const Interactive: Story = {
+  name: 'Interactive Demo',
   args: {
-    ...Primary.args,
-    size: 'sm',
-    ariaLabel: 'Small Button',
+    variant: 'primary',
+    size: 'md',
+    icon: '🐇',
+    isDisabled: false,
+    isLoading: false,
+    fullWidth: false,
+    badge: '',
   },
+  render: (args) => ({
+    props: {
+      ...args,
+      onClick: () => alert('Button clicked! Ready to hop forward? 🐇'),
+    },
+    template: `
+      <hop-button
+        [variant]="variant"
+        [size]="size"
+        [isDisabled]="isDisabled"
+        [isLoading]="isLoading"
+        [fullWidth]="fullWidth"
+        [icon]="icon"
+        [badge]="badge"
+        (click)="onClick()">
+        Hop Dashboard Action
+      </hop-button>
+    `,
+  }),
 };
 
-export const Large: Story = {
-  args: {
-    ...Primary.args,
-    size: 'lg',
-    ariaLabel: 'Large Button',
-  },
-};
+export const BunnyThemed: Story = {
+  name: '🐇 Bunny.net Themed',
+  render: () => ({
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; padding: 24px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px;">
+        <h3 style="margin: 0; color: #1e293b;">Hop Dashboard Controls</h3>
 
-export const ExtraLarge: Story = {
-  args: {
-    ...Primary.args,
-    size: 'xl',
-    ariaLabel: 'Extra Large Button',
-  },
-};
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <hop-button icon="🐇" variant="primary">Deploy Edge</hop-button>
+          <hop-button icon="📊" variant="secondary">Analytics</hop-button>
+          <hop-button icon="⚡" variant="outline">CDN Status</hop-button>
+          <hop-button icon="🌍" variant="ghost" badge="Live">Global Nodes</hop-button>
+        </div>
 
-export const ExtraSmall: Story = {
-  args: {
-    ...Primary.args,
-    size: 'xs',
-    ariaLabel: 'Extra Small Button',
-  },
+        <div style="display: flex; gap: 8px;">
+          <hop-button icon="🔄" size="sm" variant="outline">Auto Refresh</hop-button>
+          <hop-button icon="⚙️" size="sm" variant="ghost">Settings</hop-button>
+          <hop-button icon="📥" size="sm" variant="ghost">Export</hop-button>
+        </div>
+      </div>
+    `,
+  }),
 };

@@ -1,1 +1,259 @@
-/* You can add global styles to this file, and also import other style files */
+/* Main stylesheet for Hop Dashboard */
+// @import 'variables';
+// @import 'mixins';
+// @import 'base';
+// @import 'components';
+// @import 'utilities';
+
+// Global styles and CSS custom properties
+:root {
+  // Brand Colors (bunny.net inspired)
+  --hop-primary: #ff6b35;
+  --hop-secondary: #4285f4;
+  --hop-accent: #00bcd4;
+
+  // Status Colors
+  --hop-success: #22c55e;
+  --hop-warning: #f59e0b;
+  --hop-error: #ef4444;
+  --hop-info: #3b82f6;
+
+  // Neutral Colors
+  --hop-white: #ffffff;
+  --hop-gray-50: #f8fafc;
+  --hop-gray-100: #f1f5f9;
+  --hop-gray-200: #e2e8f0;
+  --hop-gray-300: #cbd5e1;
+  --hop-gray-400: #94a3b8;
+  --hop-gray-500: #64748b;
+  --hop-gray-600: #475569;
+  --hop-gray-700: #334155;
+  --hop-gray-800: #1e293b;
+  --hop-gray-900: #0f172a;
+
+  // Semantic Colors (Light Theme)
+  --hop-bg-primary: var(--hop-white);
+  --hop-bg-secondary: var(--hop-gray-50);
+  --hop-bg-tertiary: var(--hop-gray-100);
+  --hop-text-primary: var(--hop-gray-900);
+  --hop-text-secondary: var(--hop-gray-600);
+  --hop-text-muted: var(--hop-gray-500);
+  --hop-border: var(--hop-gray-200);
+  --hop-border-light: var(--hop-gray-100);
+
+  // Spacing
+  --hop-space-xs: 0.25rem;   // 4px
+  --hop-space-sm: 0.5rem;    // 8px
+  --hop-space-md: 1rem;      // 16px
+  --hop-space-lg: 1.5rem;    // 24px
+  --hop-space-xl: 2rem;      // 32px
+  --hop-space-2xl: 3rem;     // 48px
+  --hop-space-3xl: 4rem;     // 64px
+
+  // Border Radius
+  --hop-radius-sm: 0.25rem;  // 4px
+  --hop-radius-md: 0.5rem;   // 8px
+  --hop-radius-lg: 0.75rem;  // 12px
+  --hop-radius-xl: 1rem;     // 16px
+  --hop-radius-full: 9999px;
+
+  // Shadows
+  --hop-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --hop-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --hop-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --hop-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  // Typography
+  --hop-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --hop-font-mono: 'JetBrains Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+
+  --hop-font-size-xs: 0.75rem;   // 12px
+  --hop-font-size-sm: 0.875rem;  // 14px
+  --hop-font-size-md: 1rem;      // 16px
+  --hop-font-size-lg: 1.125rem;  // 18px
+  --hop-font-size-xl: 1.25rem;   // 20px
+  --hop-font-size-2xl: 1.5rem;   // 24px
+  --hop-font-size-3xl: 1.875rem; // 30px
+  --hop-font-size-4xl: 2.25rem;  // 36px
+
+  --hop-line-height-tight: 1.25;
+  --hop-line-height-normal: 1.5;
+  --hop-line-height-relaxed: 1.75;
+
+  // Transitions
+  --hop-transition-fast: 150ms ease;
+  --hop-transition-normal: 250ms ease;
+  --hop-transition-slow: 350ms ease;
+
+  // Z-index layers
+  --hop-z-dropdown: 1000;
+  --hop-z-sticky: 1020;
+  --hop-z-fixed: 1030;
+  --hop-z-modal: 1040;
+  --hop-z-popover: 1050;
+  --hop-z-tooltip: 1060;
+  --hop-z-toast: 1070;
+}
+
+// Dark theme overrides
+@media (prefers-color-scheme: dark) {
+  :root {
+    --hop-bg-primary: var(--hop-gray-900);
+    --hop-bg-secondary: var(--hop-gray-800);
+    --hop-bg-tertiary: var(--hop-gray-700);
+    --hop-text-primary: var(--hop-gray-100);
+    --hop-text-secondary: var(--hop-gray-300);
+    --hop-text-muted: var(--hop-gray-400);
+    --hop-border: var(--hop-gray-700);
+    --hop-border-light: var(--hop-gray-600);
+  }
+}
+
+// Explicit dark theme class
+[data-theme="dark"] {
+  --hop-bg-primary: var(--hop-gray-900);
+  --hop-bg-secondary: var(--hop-gray-800);
+  --hop-bg-tertiary: var(--hop-gray-700);
+  --hop-text-primary: var(--hop-gray-100);
+  --hop-text-secondary: var(--hop-gray-300);
+  --hop-text-muted: var(--hop-gray-400);
+  --hop-border: var(--hop-gray-700);
+  --hop-border-light: var(--hop-gray-600);
+}
+
+// Global base styles
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--hop-font-family);
+  line-height: var(--hop-line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--hop-bg-secondary);
+  color: var(--hop-text-primary);
+  font-size: var(--hop-font-size-md);
+}
+
+// Focus styles
+:focus-visible {
+  outline: 2px solid var(--hop-primary);
+  outline-offset: 2px;
+}
+
+// Selection styles
+::selection {
+  background: var(--hop-primary);
+  color: white;
+}
+
+// Scrollbar styles
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--hop-bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--hop-border);
+  border-radius: var(--hop-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--hop-text-muted);
+}
+
+// Animations
+@keyframes hop {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Utility classes
+.hop-animation {
+  animation: hop 2s ease-in-out infinite;
+}
+
+.fade-in {
+  animation: fadeIn var(--hop-transition-normal) ease;
+}
+
+.slide-in-right {
+  animation: slideInRight var(--hop-transition-normal) ease;
+}
+
+.loading-spinner .spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--hop-border);
+  border-top: 2px solid var(--hop-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+// Responsive breakpoints
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 16px;
+  }
+}
